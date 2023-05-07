@@ -1,0 +1,441 @@
+<doctype html>
+  <html class="no-js" lang="">
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
+      <title>dripfeed.tv</title>
+      <meta
+        name="description"
+        content="Dripfeed.tv (2018–Ongoing) is a body of videos and performances by Tarren Johnson & Joel Cocks concerned with the evolving ways media is consumed and the impact on social relations, psychological states and identity."
+      />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
+      />
+      <meta property="og:url" content="http://www.dripfeed.tv" />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="dripfeed.tv" />
+      <meta
+        property="og:description"
+        content="Dripfeed.tv (2018–Ongoing) is a body of videos and performances by Tarren Johnson & Joel Cocks concerned with the evolving ways media is consumed and the impact on social relations, psychological states and identity."
+      />
+      <meta
+        property="og:image"
+        content="./img/dripfeed-tarren-johnson-and-joel-cocks.jpg"
+      />
+      <meta
+        name="keywords"
+        content="tarren johnson, joel cocks, dripfeed, dripfeed.tv, video art, series, performance, artist, art, drip feed, drip-feed, dripfeed.tv"
+      />
+      <link rel="apple-touch-icon" href="icon.png" />
+      <link rel="stylesheet" type="text/css" href="./css/style.css" />
+      <link rel="manifest" href="site.webmanifest" />
+    </head>
+
+    <body>
+      <div class="loading-bar"></div>
+      <div class="page-cover"></div>
+      <div class="info"></div>
+      <div id="container">
+        <div id="content">
+          <div class="tab-fader-next">▶︎</div>
+          <div class="tab-wrapper"><div class="tab-wrapper-inner"></div></div>
+          <div class="lip"></div>
+          <div class="central-area">
+            <div class="credits"><div class="credits-inner"></div></div>
+            <div class="cover-frame">
+              <span></span>
+              <div class="play-button"></div>
+            </div>
+            <div class="access-screen">
+              <form>
+                <input
+                  class="code"
+                  type="password"
+                  placeholder="Enter the code"
+                />
+                <button>Unlock</button
+                ><label onclick="alert('Please contact us for the code.')"
+                  >?</label
+                >
+              </form>
+            </div>
+            <footer>
+              <a href="#" onclick="showCredits()">Credits</a> |
+              <a href="http://tarrenjohnson.info" target="_blank">About</a> | ©
+              Copyright 2018–<span>2022</span>, Tarren Johnson & Joel Cocks
+            </footer>
+          </div>
+        </div>
+      </div>
+      <form
+        id="videoForm"
+        method="POST"
+        action="https://script.google.com/macros/s/AKfycbxy184IKKKssQRceeccd5LUwkjjfZLntD50bfQWVmpK9B2JfHedIchEwaGym94icBd7Hg/exec"
+        style="display: none"
+      >
+        <input type="hidden" name="functionName" id="doGetVideoLinks" />
+        <input type="hidden" name="videoCode" id="videoCode" />
+        <input type="hidden" name="videoEpisode" id="videoEpisode" />
+        <iframe
+          id="responseFrame"
+          name="responseFrame"
+          style="display: none"
+        ></iframe>
+      </form>
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"
+      ></script>
+
+        <script>
+        window.jQuery ||
+          document.write(
+            '<script src="js/vendor/jquery-3.3.1.min.js"><\/script>',
+          );
+      </script>
+
+      <script type="text/javascript">
+        // element constants
+
+        const loadingBar = document.querySelector('.loading-bar');
+        const pageCover = document.querySelector('.page-cover');
+        const info = document.querySelector('.info');
+        const tabWrapper = document.querySelector('.tab-wrapper');
+        const tabWrapperInner = document.querySelector('.tab-wrapper-inner');
+        const tabFader = document.querySelector('.tab-fader-next');
+        const coverFrame = document.querySelector('.cover-frame');
+        const playButton = document.querySelector('.play-button');
+        const episodeTitle = document.querySelector('.cover-frame span');
+        const accessScreen = document.querySelector('.access-screen');
+        const form = document.querySelector('form');
+        const accessCodeInput = document.querySelector('.code');
+        const centralArea = document.querySelector('.central-area');
+        const credits = document.querySelector('.credits');
+        const creditsInner = document.querySelector('.credits-inner');
+
+        // lets
+
+        let loadedData, coverURL, sliderWidth, progress;
+        let currentEpisodeIndex = 0;
+        let loadingCurrentProgress = 0;
+        let lodingStep = 1.4; // the smaller the slower
+
+        // useful functions
+
+        const unselectAllTabs = () => {
+          // make all the tabs clear
+          const tabImages = document.querySelectorAll('.tab-image');
+          tabImages.forEach((tabImage, i) => {
+            if (i === 0) {
+              tabImage.src = `./img/tab-image-default.gif`;
+            } else {
+              tabImage.src = `./img/tab-image-unselected.gif`;
+            }
+          });
+        };
+
+        const scrollToEndOfTabs = () => {
+          $('.tab-wrapper').animate(
+            { scrollLeft: tabWrapper.scrollWidth },
+            1000,
+          );
+          $('.tab-fader-next').fadeOut();
+        };
+
+        const showCredits = () => {
+          credits.style.display = 'block';
+          unselectAllTabs();
+        };
+
+        const convertEpisodeIndextoEpisodeNumber = (i) => {
+          let epNum;
+          let parsedIndex = parseInt(i);
+          if (parsedIndex > 0) {
+            epNum = parsedIndex + 2;
+          } else {
+            epNum = parsedIndex + 1;
+          }
+          return epNum;
+        };
+
+        const convertEpisodeNumbertoEpisodeIndex = (i) => {
+          let epNum = parseInt(i);
+          let index;
+          if (epNum > 1) {
+            index = epNum - 2;
+          } else {
+            index = epNum - 1;
+          }
+          return index;
+        };
+
+        const pageResize = () => {
+          sliderWidth = loadedData.length * 84 + 7;
+          tabWrapperInner.style.width = sliderWidth + 'px';
+          if (sliderWidth > window.innerWidth) {
+            $('.tab-fader-next').css('display', 'flex');
+          } else {
+            $('.tab-fader-next').hide();
+          }
+        };
+
+        const playClickHandler = () => {
+          setTimeout(function () {
+            $('.play-button').fadeOut();
+            $('.cover-frame').fadeOut();
+            form.style.display = 'block';
+          }, 300);
+        };
+
+        const sanitizeInput = (input) => {
+          const sanitizedInput = input.replace(/[^a-zA-Z0-9]/g, '');
+          return sanitizedInput;
+        };
+
+        const validateInput = (input) => {
+          const pattern = /^[a-zA-Z0-9]{4}$/;
+          return pattern.test(input);
+        };
+
+        const formSubmit = async (e) => {
+          e.preventDefault();
+          const accessCode = accessCodeInput.value;
+          const sanitizedCode = sanitizeInput(accessCode);
+          if (!validateInput(sanitizedCode)) {
+            accessCodeInput.value = '';
+            accessCodeInput.classList.add('error');
+            accessCodeInput.placeholder = 'Code invalid';
+            accessCodeInput.blur();
+            setTimeout(() => {
+              accessCodeInput.placeholder = 'Enter the code';
+              accessCodeInput.classList.remove('error');
+            }, 1000);
+            return;
+          }
+
+          const episode =
+            'ep' + convertEpisodeIndextoEpisodeNumber(currentEpisodeIndex);
+
+          const videoForm = document.getElementById('videoForm');
+          let videoFunctionName = document.getElementById('doGetVideoLinks'); // Changed the id to match the name attribute
+          let videoCode = document.getElementById('videoCode');
+          let videoEpisode = document.getElementById('videoEpisode');
+          const responseFrame = document.getElementById('responseFrame');
+
+          videoFunctionName.value = 'doGetVideoLinks';
+          videoCode.value = accessCode;
+          videoEpisode.value = episode;
+
+          try {
+            const response = await fetch(videoForm.action, {
+              method: videoForm.method,
+              body: new FormData(videoForm),
+            });
+            const jsonResponse = await response.json();
+
+            if (jsonResponse.result === 'success') {
+              const videoURL = jsonResponse.videoURL;
+              const iframeWrapper = document.createElement('div');
+              const iframe = document.createElement('iframe');
+              iframeWrapper.classList = 'iframe-wrapper';
+              iframe.id = 'flvvideo';
+              iframe.classList = 'vjs-sublime-skin vjs-big-play-centered';
+              iframe.width = '578';
+              iframe.height = '440';
+              iframe.src = videoURL;
+              iframe.frameborder = 0;
+              iframe.allow = 'autoplay; encrypted-media';
+              iframe.allowfullscreen = '';
+              accessScreen.style.opacity = 0;
+              setTimeout(function () {
+                accessScreen.style.display = 'none';
+                iframeWrapper.appendChild(iframe);
+                centralArea.appendChild(iframeWrapper);
+                iframe.style.display = 'block';
+                iframe.src += '&autoplay=1';
+              }, 500);
+            } else {
+              accessCodeInput.value = '';
+              accessCodeInput.classList.add('error');
+              accessCodeInput.placeholder = jsonResponse.message; // display the error message
+              accessCodeInput.blur();
+              setTimeout(() => {
+                accessCodeInput.placeholder = 'Enter the code';
+                accessCodeInput.classList.remove('error');
+              }, 1000);
+            }
+          } catch (error) {}
+        };
+
+        const openEpisode = (index) => {
+          startLoading();
+          // hide credits
+          credits.style.display = 'none';
+          // set thumbnail
+          const thumbnailURL =
+            parseInt(index) === 2
+              ? `url(./img/episode-cover.jpg)`
+              : `url(${loadedData[index].mainImage})`;
+          coverFrame.style.backgroundImage = thumbnailURL;
+          // set title
+          const title = loadedData[parseInt(index)].title;
+          let newTitle;
+          if (title.includes('E0')) {
+            newTitle = title.replace('E0', 'Episode ');
+          } else {
+            newTitle = title.replace('d E', 'd Episode ');
+          }
+          episodeTitle.innerHTML = newTitle;
+          // select the right tab
+          unselectAllTabs();
+          const tab = document.querySelector('.index' + index + ' .tab-image');
+          // the first tab uses a different jpeg so we need to check if it is the first
+          const tabSrc =
+            parseInt(index) === 0
+              ? `./img/tab-image-selected-first.gif`
+              : `./img/tab-image-selected.gif`;
+          tab.src = tabSrc;
+
+          setTimeout(function () {
+            endLoading();
+          }, 400);
+          // prepare formplay button and iframe
+          $('.iframe-wrapper').remove();
+          accessCodeInput.value = '';
+          form.style.display = 'block';
+          playButton.style.display = 'block';
+          coverFrame.style.display = 'block';
+          currentEpisodeIndex = index;
+          accessScreen.style.opacity = 1;
+          accessScreen.style.display = 'flex';
+          form.addEventListener('submit', formSubmit);
+        }; // end of index openeer
+
+        const startLoading = () => {
+          loadingBar.style.width = '0%';
+          loadingBar.style.display = 'block';
+          interval = setInterval(function () {
+            loadingCurrentProgress += lodingStep;
+            progress =
+              Math.round(
+                (Math.atan(loadingCurrentProgress) / (Math.PI / 2)) *
+                  100 *
+                  1000,
+              ) / 1000;
+            loadingBar.style.width = progress + '%';
+            if (progress >= 100) {
+              clearInterval(interval);
+            } else if (progress >= 70) {
+              lodingStep = 0.1;
+            }
+          }, 100);
+        };
+
+        const endLoading = () => {
+          clearInterval(interval);
+          loadingBar.style.width = '100%';
+          setTimeout(() => {
+            setTimeout(() => {
+              loadingBar.style.display = 'none';
+              loadingBar.style.width = '0%';
+              pageCover.style.display = 'none';
+            }, 10);
+          }, 500);
+        };
+
+        const init = (epIndex) => {
+          startLoading();
+          document.querySelector('footer span').innerHTML =
+            new Date().getFullYear();
+          fetch(
+            'https://opensheet.elk.sh/1DwFOetyRDInpAXXTM6YUhYr6dKyGFhi7rs_jEkuIOe8/Dripfeed',
+          )
+            .then((result) => result.json())
+            .then((data) => {
+              loadedData = data;
+              const buttonText = document.querySelector('.buttxt');
+              info.innerHTML = data[0].sectionInfo;
+              pageResize();
+              const hash = window.location.hash;
+              const hashIndex = hash.split('#ep');
+              if (
+                convertEpisodeNumbertoEpisodeIndex(parseInt(hashIndex[1])) <
+                data.length
+              ) {
+                epIndex = convertEpisodeNumbertoEpisodeIndex(
+                  parseInt(hashIndex[1]),
+                );
+              }
+              for (var i = 0; i < data.length; i++) {
+                const a = document.createElement('a');
+                const tab = document.createElement('div');
+                const tabTextInner = document.createElement('div');
+                const tabImage = document.createElement('img');
+                tabImage.classList = 'tab-image';
+                tabImage.dataset.index = i;
+                tab.classList = 'tab';
+                if (i === 0) {
+                  tabImage.src = `./img/tab-image-selected-first.gif`;
+                } else {
+                  tabImage.src = `./img/tab-image-unselected.gif`;
+                }
+                a.href = `#ep${convertEpisodeIndextoEpisodeNumber(i)}`;
+                a.dataset.index = i;
+                a.classList = 'index' + i;
+                a.addEventListener('click', () => {
+                  openEpisode(a.dataset.index);
+                });
+                tabTextInner.classList = 'tab-text-inner';
+                tabTextInner.innerHTML = i > 0 ? `EP${i + 2}` : `EP${i + 1}`;
+                a.append(tabTextInner);
+                tab.append(tabImage);
+                tab.append(tabTextInner);
+                a.append(tab);
+                tabWrapperInner.append(a);
+                if (i === data.length - 1) {
+                  endLoading();
+                  openEpisode(epIndex);
+                }
+                // fill the credits
+                creditsInner.innerHTML = `${
+                  creditsInner.innerHTML
+                }<br><br><p><b>${data[i].title}</b><br><br>${
+                  data[i].artist
+                }, ${data[i].year}<br>${data[i].format}${
+                  data[i].duration ? ', ' + data[i].duration : ''
+                }<br>Starring: ${data[i].starring}<br>${
+                  data[i].music ? data[i].music + '<br>' : ''
+                }${
+                  data[i].screenings
+                    ? 'Screenings:<br>' + data[i].screenings
+                    : ''
+                } ${
+                  data[i].support
+                    ? '<br>Supported by:<br>' + data[i].support
+                    : ''
+                }</p>`;
+              }
+              // repeat credits
+              creditsInner.innerHTML =
+                creditsInner.innerHTML + creditsInner.innerHTML;
+            });
+        };
+
+        // event listeners
+
+        window.addEventListener('resize', pageResize);
+        tabFader.addEventListener('click', scrollToEndOfTabs);
+        tabWrapper.addEventListener('scroll', () => {
+          tabFader.style.display = 'flex';
+        });
+        playButton.addEventListener('click', playClickHandler);
+
+        //init
+
+        init(0);
+      </script>
+    </body>
+  </html>
+</doctype>
