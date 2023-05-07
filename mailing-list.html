@@ -1,0 +1,57 @@
+<doctype html>
+  <html class="no-js" lang="">
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge" />
+      <title>dripfeed.tv | Mailing list</title>
+      <link rel="apple-touch-icon" href="icon.png" />
+      <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    </head>
+
+    <body style="background: gray !important">
+      <div class="signup-wrapper">
+        <form
+          id="myform"
+          method="POST"
+          action="https://script.google.com/macros/s/AKfycbwTWs9Qbq8Kh5IuuxvAFkavjJt7spb8C8b25DBjtqNTDe3gGQgrIA2hdfxViPrpeZgdoQ/exec"
+        >
+          <input
+            id="emailInput"
+            name="Email"
+            type="email"
+            placeholder="Your email"
+          />
+          <button id="subscribeButton" type="submit">
+            Send me dripfeed.tv news
+          </button>
+        </form>
+      </div>
+
+      <script>
+        const emailInput = document.getElementById('emailInput');
+        const subscribeButton = document.getElementById('subscribeButton');
+        const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+        emailInput.addEventListener('focus', () => {
+          emailInput.placeholder = 'Enter email';
+        });
+
+        window.addEventListener('load', function () {
+          const form = document.getElementById('myform');
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            const action = e.target.action;
+            fetch(action, {
+              method: 'POST',
+              body: data,
+            }).then(() => {
+              form.innerHTML =
+                '<p style="font-size:15px; padding:10px">Thank you. You have been added to the list.</p>';
+            });
+          });
+        });
+      </script>
+    </body>
+  </html>
+</doctype>
