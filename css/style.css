@@ -314,6 +314,7 @@ input {
   background: white;
   border: 1px solid rgb(102, 102, 102);
 }
+
 input::placeholder {
   color: black;
 }
@@ -368,6 +369,13 @@ label {
 footer a,
 footer a:visited {
   float: none;
+}
+
+/*Mailing list*/
+
+#emailInput, #subscribeButton{
+width: 200px;
+text-align: left;
 }
 
 @media only screen and (max-width: 600px) {
