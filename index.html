@@ -55,16 +55,18 @@
                   placeholder="Enter the code"
                 />
                 <button>Unlock</button
-                ><label onclick="alert('Contact us for inquiries about viewing or screening Dripfeed.tv)"
+                ><label
+                  onclick="alert('Please contact us for viewing or screening inquiries.')"
                   >?</label
                 >
               </form>
             </div>
             <footer>
-              <a href="http://tarrenjohnson.info" target="_blank">Series Info</a> | 
-              <a href="#" onclick="showCredits()">Episode Notes</a> |
-              <a href="mailing-list.html" >Mailing List</a> | ©
-              Copyright 2018–<span>2022</span>, Tarren Johnson & Joel Cocks
+              <a href="http://tarrenjohnson.info" target="_blank"
+                >Series Info</a
+              > | <a href="#" onclick="showCredits()">Episode Notes</a> |
+              <a href="mailing-list.html">Mailing List</a> | © Copyright
+              2018–<span>2022</span>, Tarren Johnson & Joel Cocks
             </footer>
           </div>
         </div>
@@ -90,7 +92,7 @@
         crossorigin="anonymous"
       ></script>
 
-        <script>
+      <script>
         window.jQuery ||
           document.write(
             '<script src="js/vendor/jquery-3.3.1.min.js"><\/script>',
@@ -196,7 +198,7 @@
         };
 
         const validateInput = (input) => {
-         const pattern = /^[a-zA-Z0-9]{1,10}$/;
+          const pattern = /^[a-zA-Z0-9]{1,10}$/;
           return pattern.test(input);
         };
 
@@ -248,7 +250,7 @@
               iframe.src = videoURL;
               iframe.frameborder = 0;
               iframe.allow = 'autoplay; encrypted-media';
-             iframe.allowFullscreen = true;
+              iframe.allowFullscreen = true;
               accessScreen.style.opacity = 0;
               setTimeout(function () {
                 accessScreen.style.display = 'none';
