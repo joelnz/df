@@ -191,11 +191,11 @@ html {
   }
 
   100% {
-    transform: translateY(-1000px);
-    -ms-transform: translateY(-1000px);
-    -webkit-transform: translateY(-1000px);
-    -o-transform: translateY(-1000px);
-    -moz-transform: translateY(-1000px);
+    transform: translateY(-1500px);
+    -ms-transform: translateY(-1500px);
+    -webkit-transform: translateY(-1500px);
+    -o-transform: translateY(-1500px);
+    -moz-transform: translateY(-1500px);
   }
 }
 
@@ -292,12 +292,13 @@ a {
   color: cornflowerblue;
 }
 
-.cover-frame span {
-  padding: 10px;
+.cover-frame .episode-title {
+  padding: 10px 10px 5px 10px;
   font-size: 18px;
   font-weight: bold;
   display: block;
   color: rgba(256, 256, 256, 0.8);
+   text-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
 .access-screen form {
@@ -362,8 +363,73 @@ label {
   align-items: center;
   justify-content: center;
 }
-.info {
-  display: none;
+
+.synopsis{
+  padding: 0;
+  z-index: 1000;
+ position: absolute;
+ margin-left: -33%;
+ left: 50%;
+ margin-top: -70px;
+ top: 50%;
+
+ height: auto;
+display: none;
+/*background: rgb(0,0,0);
+background: linear-gradient(0deg, rgba(256,256,256,.9) 50%, rgba(256,256,256,0) 100%);*/
+ font-size: 10px;
+ color: black;
+ display: flex;
+   align-items: center;
+   justify-content: center;
+display: none;
+ font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
+width: 66%;
+height: 140px;
+background: white;
+border: 1px solid gray;
+
+  letter-spacing: 0.04em;
+}
+.synopsis-header{
+  width: calc(100% - 20px);
+  text-align: left;
+  padding: 0;
+   font-weight: bold;
+background: silver;
+     padding: 5px 10px;
+     font-weight: bold;
+     display: block;
+
+}
+
+.synopsis-text{
+  width: calc(100% - 20px);
+  text-align: left;
+
+   padding: 10px;
+}
+
+.episode-details{
+   font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
+  z-index: 1000;
+
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-decoration: underline;
+
+   
+}
+.synopsis em {
+  font-style: normal;
+  display: flex;
+  align-items: flex-end;
+
 }
 
 footer a,

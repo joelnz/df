@@ -35,7 +35,6 @@
     <body>
       <div class="loading-bar"></div>
       <div class="page-cover"></div>
-      <div class="info"></div>
       <div id="container">
         <div id="content">
           <div class="tab-fader-next">▶︎</div>
@@ -44,10 +43,14 @@
           <div class="central-area">
             <div class="credits"><div class="credits-inner"></div></div>
             <div class="cover-frame">
-              <span></span>
+              <div class="synopsis"><div class="synopsis-header"></div><div class="synopsis-text"></div></div>
+              
+              
+              <span class="episode-title"></span>
               <div class="play-button"></div>
             </div>
             <div class="access-screen">
+
               <form>
                 <input
                   class="code"
@@ -61,8 +64,8 @@
               </form>
             </div>
             <footer>
-              <a href="#" onclick="showCredits()">Credits</a> |
-              <a href="http://tarrenjohnson.info" target="_blank">About</a> | 
+              <a href="http://tarrenjohnson.info" >Series Info</a> |
+              <a href="#" onclick="showCredits()">Episode Notes</a> | 
               <a href="mailing-list.html" >Mailing List</a> | ©
               Copyright 2018–<span>2022</span>, Tarren Johnson & Joel Cocks
             </footer>
@@ -102,13 +105,12 @@
 
         const loadingBar = document.querySelector('.loading-bar');
         const pageCover = document.querySelector('.page-cover');
-        const info = document.querySelector('.info');
         const tabWrapper = document.querySelector('.tab-wrapper');
         const tabWrapperInner = document.querySelector('.tab-wrapper-inner');
         const tabFader = document.querySelector('.tab-fader-next');
         const coverFrame = document.querySelector('.cover-frame');
         const playButton = document.querySelector('.play-button');
-        const episodeTitle = document.querySelector('.cover-frame span');
+        const episodeTitle = document.querySelector('.cover-frame .episode-title');
         const accessScreen = document.querySelector('.access-screen');
         const form = document.querySelector('form');
         const accessCodeInput = document.querySelector('.code');
@@ -189,6 +191,11 @@
             form.style.display = 'block';
           }, 300);
         };
+
+
+        const episodeDetailsClickHandler = () =>{
+          $('.synopsis').toggle()
+        }
 
         const sanitizeInput = (input) => {
           const sanitizedInput = input.replace(/[^a-zA-Z0-9]/g, '');
@@ -289,6 +296,11 @@
             newTitle = title.replace('d E', 'd Episode ');
           }
           episodeTitle.innerHTML = newTitle;
+          const synopsisHeader = document.querySelector('.synopsis .synopsis-header')
+          const synopsis = document.querySelector('.synopsis .synopsis-text')
+          synopsis.innerHTML = `${loadedData[parseInt(index)]['***']}`
+synopsisHeader.innerHTML = `Synopsis`
+
           // select the right tab
           unselectAllTabs();
           const tab = document.querySelector('.index' + index + ' .tab-image');
@@ -357,7 +369,6 @@
             .then((data) => {
               loadedData = data;
               const buttonText = document.querySelector('.buttxt');
-              info.innerHTML = data[0].sectionInfo;
               pageResize();
               const hash = window.location.hash;
               const hashIndex = hash.split('#ep');
