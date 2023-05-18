@@ -191,11 +191,11 @@ html {
   }
 
   100% {
-    transform: translateY(-1000px);
-    -ms-transform: translateY(-1000px);
-    -webkit-transform: translateY(-1000px);
-    -o-transform: translateY(-1000px);
-    -moz-transform: translateY(-1000px);
+    transform: translateY(-1500px);
+    -ms-transform: translateY(-1500px);
+    -webkit-transform: translateY(-1500px);
+    -o-transform: translateY(-1500px);
+    -moz-transform: translateY(-1500px);
   }
 }
 
