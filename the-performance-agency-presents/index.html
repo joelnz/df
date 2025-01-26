@@ -10,10 +10,6 @@
       rel="stylesheet"
     />
     <style>
-      * {
-        /* box-shadow: inset 0 0 2px red;*/
-      }
-
       body,
       html {
         margin: 0;
@@ -143,10 +139,10 @@
         background: gray;
       }
 
-        #infoOverlay button{
-          background: #afafaf;
-          color: #222;
-        }
+      #infoOverlay button {
+        background: #afafaf;
+        color: #222;
+      }
       #infoOverlay p {
         max-width: 500px;
       }
@@ -173,7 +169,7 @@
         bottom: 0px;
         width: 100vw;
         left: 0px;
-      
+
         background: none;
         color: white;
         padding: 0;
@@ -194,21 +190,10 @@
         padding: 20px;
       }
 
-      .lip {
-        width: 100vw;
-        background: url(https://dripfeed.tv/img/horizontal-bar.png);
-        background-size: 100% 100%;
-        text-align: center;
-        height: 16px;
-        margin-top: -16px;
-        position: absolute;
-        top: 0;
-        filter: invert(1);
-        color: black;
-      }
-
-      .ending-time {
-        background: green;
+      @media (max-width: 767px) {
+        #fullscreenButton {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -242,18 +227,17 @@
     <div id="infoOverlay">
       <button id="closeInfo">Close</button>
       <div class="buffer"></div>
-      <div class="lip"> </div>
+
       <p>
         <b>The Performance Agency presents:</b> <br /><br />
-       
-     
+
         Dripfeed Episode 6: Succubus<br />
         Tarren Johnson & Joel Cocks<br />
         2025, 15 minutes<br /><br />
 
-         <b>Three-day simulcast, continuous loop.<br /><br /> </b>
+        <b>Three-day simulcast, continuous loop.<br /><br /> </b>
 
-        "Dripfeed.tv" (2018–) is an ongoing video series by Tarren Johnson and
+        Dripfeed.tv (2018–) is an ongoing video series by Tarren Johnson and
         Joel Cocks that develops as a fragmented fiction, capturing the
         boundary between creation and collapse. Episodes blend B-roll footage,
         directorial cues, poetic dialogue, and actors grappling with rehearsal
@@ -261,15 +245,17 @@
         media, the series explores how narratives fracture, evolve, and resist
         coherence, reflecting the messy interplay of performance, trauma, and
         collective memory.<br />
-               This Dripfeed.tv simulcast is presented in conjunction with the opening of "Blank Banquet", a solo exhibition by Joel Cocks and Tarren Johnson at The Physics Room, curated by Jane Wallace.<br>
+             This simulcast of Dripfeed.tv is presented in conjunction with the
+        opening of "Blank Banquet", a solo exhibition by Joel Cocks and Tarren
+        Johnson at The Physics Room, curated by Jane Wallace.<br />
 
-        Voiceover: <b>Olamiju Fajemisin</b> <br />
-        Featuring: <b>Medhi Hamadouchi, Salber Lee Williams</b><br />
-        Costume: <b>Marcus Karkhof</b><br />
+        Voiceover: Olamiju Fajemisin<br />
+        Featuring: Medhi Hamadouchi, Salber Lee Williams<br />
+        Costume: Marcus Karkhof<br />
 
-      Partners: <b>Cité internationale des arts, Organ Vida Festival, The Physics Room, The Performance Agency</b>
-<br><br>
-   
+        Partners: Cité internationale des arts, Organ Vida Festival, The
+        Physics Room, The Performance Agency
+        <br /><br />
       </p>
     </div>
 
@@ -302,9 +288,14 @@
           }
         });
       });
+
       // Handle info button click
       infoButton.addEventListener('click', () => {
         infoOverlay.style.display = 'block';
+        vimeoPlayer.setMuted(true);
+        unmuteButton.style.background = 'rgb(21, 76, 175)';
+        unmuteButton.style.color = 'lightblue';
+        unmuteButton.innerHTML = 'Unmute';
       });
 
       // Handle close info button click
@@ -384,7 +375,6 @@
           iframeWrapper.style.maxHeight = 'calc(100vh)';
           iframeWrapper.style.maxWidth = 'calc(100vh * (4 / 3))';
           iframeWrapper.style.aspectRatio = '4 / 3';
-
           // Force repaint
           iframeWrapper.style.opacity = '0.99'; // Temporarily change opacity
           setTimeout(() => {
