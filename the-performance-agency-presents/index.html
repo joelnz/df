@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Performance Agency Presents: DFTV Simulcast</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        /* box-shadow: inset 0 0 2px red;*/
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: white;
+        font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
+
+        background: black;
+      }
+
+      button {
+        margin: 2px;
+        background: #111;
+        color: gray;
+        font-size: 12px;
+        padding: 3px 10px;
+        outline: none;
+        border: 1px solid #666;
+        border-bottom: 1px solid #222;
+        border-right: 1px solid #222;
+        letter-spacing: 0.03em;
+        font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
+      }
+
+      .iframe-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 0;
+        margin: 0;
+        height: auto;
+        width: 100vw;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        max-height: calc(85vh);
+        max-width: 100vw;
+        overflow: hidden;
+        background: black;
+      }
+
+      #vimeoPlayer {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .video-overlay {
+        position: absolute;
+
+        width: 100vw;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        max-height: calc(85vh);
+        max-width: calc(85vh * (4 / 3));
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Unmute button */
+      #unmuteButton {
+        background: rgb(21, 76, 175);
+
+        color: lightblue;
+
+        cursor: pointer;
+        z-index: 101;
+      }
+
+      .video-overlay #headerText {
+        position: absolute;
+        top: 3%; /* Adjust to position the text */
+        left: 3%;
+
+        text-align: left;
+        color: rgba(256, 256, 256, 0.8);
+        font-weight: bold;
+        box-sizing: border-box;
+        pointer-events: none;
+        line-height: 1.2;
+      }
+
+      #statusMessage {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        color: white;
+        text-align: center;
+        display: none;
+      }
+
+      #infoOverlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        z-index: 9999;
+        font-size: 13px;
+        line-height: 1.5;
+        color: white;
+        /*background: url('http://dripfeed.tv/img/background-pinstripe.png') !important;*/
+        background: gray;
+      }
+
+        #infoOverlay button{
+          background: #afafaf;
+          color: #222;
+        }
+      #infoOverlay p {
+        max-width: 500px;
+      }
+
+      #infoOverlay .buffer {
+        height: 150px;
+
+        width: 100%;
+      }
+
+      #infoOverlay h2 {
+        margin-top: 0;
+      }
+
+      #closeInfo {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        cursor: pointer;
+      }
+      footer {
+        position: fixed;
+        bottom: 0px;
+        width: 100vw;
+        left: 0px;
+      
+        background: none;
+        color: white;
+        padding: 0;
+        font-size: 12px;
+        font-weight: bold;
+        box-sizing: border-box;
+        height: 7.5vh;
+
+        z-index: 101;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
+      }
+      footer img {
+        width: 50px;
+        background: black;
+        padding: 20px;
+      }
+
+      .lip {
+        width: 100vw;
+        background: url(https://dripfeed.tv/img/horizontal-bar.png);
+        background-size: 100% 100%;
+        text-align: center;
+        height: 16px;
+        margin-top: -16px;
+        position: absolute;
+        top: 0;
+        filter: invert(1);
+        color: black;
+      }
+
+      .ending-time {
+        background: green;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Red overlay with Unmute Button and Info Button -->
+    <footer>
+      <button id="infoButton">Info</button>
+      <button id="fullscreenButton">Fullscreen</button>
+      <button id="unmuteButton">Unmute</button>
+    </footer>
+
+    <div class="video-overlay">
+      <!--<div id="headerText">Dripfeed Episode 6: Succubus</div>-->
+    </div>
+
+    <!-- Video -->
+    <div class="iframe-wrapper" id="expandedVideo">
+      <iframe
+        id="vimeoPlayer"
+        src="https://player.vimeo.com/video/1046267674?h=e8353f040a&badge=0&autopause=0&muted=1&autoplay=1&loop=1&controls=0"
+        frameborder="0"
+        allow="autoplay; fullscreen; clipboard-write"
+        title="[WIP] Dripfeed Episode 6: Succubus"
+      ></iframe>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage">Simulcast starts soon.</div>
+
+    <!-- Info Overlay -->
+    <div id="infoOverlay">
+      <button id="closeInfo">Close</button>
+      <div class="buffer"></div>
+      <div class="lip"> </div>
+      <p>
+        <b>The Performance Agency presents:</b> <br /><br />
+       
+     
+        Dripfeed Episode 6: Succubus<br />
+        Tarren Johnson & Joel Cocks<br />
+        2025, 15 minutes<br /><br />
+
+         <b>Three-day simulcast, continuous loop.<br /><br /> </b>
+
+        "Dripfeed.tv" (2018–) is an ongoing video series by Tarren Johnson and
+        Joel Cocks that develops as a fragmented fiction, capturing the
+        boundary between creation and collapse. Episodes blend B-roll footage,
+        directorial cues, poetic dialogue, and actors grappling with rehearsal
+        and repetition. Drawing from formats spanning vaudeville to social
+        media, the series explores how narratives fracture, evolve, and resist
+        coherence, reflecting the messy interplay of performance, trauma, and
+        collective memory.<br />
+               This Dripfeed.tv simulcast is presented in conjunction with the opening of "Blank Banquet", a solo exhibition by Joel Cocks and Tarren Johnson at The Physics Room, curated by Jane Wallace.<br>
+
+        Voiceover: <b>Olamiju Fajemisin</b> <br />
+        Featuring: <b>Medhi Hamadouchi, Salber Lee Williams</b><br />
+        Costume: <b>Marcus Karkhof</b><br />
+
+      Partners: <b>Cité internationale des arts, Organ Vida Festival, The Physics Room, The Performance Agency</b>
+<br><br>
+   
+      </p>
+    </div>
+
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script>
+      const vimeoPlayer = new Vimeo.Player('vimeoPlayer');
+      const unmuteButton = document.getElementById('unmuteButton');
+      const infoButton = document.getElementById('infoButton');
+      const infoOverlay = document.getElementById('infoOverlay');
+      const closeInfo = document.getElementById('closeInfo');
+      const statusMessage = document.getElementById('statusMessage');
+
+      const startDate = new Date('2025-01-01T12:00:00Z');
+      const endDate = new Date('2025-12-18T13:00:00Z');
+
+      // Handle unmute/mute toggle
+      unmuteButton.addEventListener('click', () => {
+        vimeoPlayer.getMuted().then((isMuted) => {
+          if (isMuted) {
+            vimeoPlayer.setMuted(false);
+            unmuteButton.style.background = '#111';
+            unmuteButton.style.color = 'gray';
+
+            unmuteButton.innerHTML = 'Mute';
+          } else {
+            vimeoPlayer.setMuted(true);
+            unmuteButton.style.background = 'rgb(21, 76, 175)';
+            unmuteButton.style.color = 'lightblue';
+            unmuteButton.innerHTML = 'Unmute';
+          }
+        });
+      });
+      // Handle info button click
+      infoButton.addEventListener('click', () => {
+        infoOverlay.style.display = 'block';
+      });
+
+      // Handle close info button click
+      closeInfo.addEventListener('click', () => {
+        infoOverlay.style.display = 'none';
+      });
+
+      // Sync video to simulcast time
+      function syncVideo() {
+        const now = new Date();
+        if (now >= startDate && now <= endDate) {
+          const elapsed = (now - startDate) / 1000; // Time since start in seconds
+          vimeoPlayer.getDuration().then((duration) => {
+            const position = elapsed % duration; // Calculate where the video should start
+            vimeoPlayer.setCurrentTime(position).then(() => {
+              vimeoPlayer.play().catch((error) => {
+                console.error('Autoplay error:', error);
+              });
+            });
+          });
+        } else if (now < startDate) {
+          statusMessage.innerText = 'Simulcast starts soon.';
+          statusMessage.style.display = 'block';
+        } else if (now > endDate) {
+          statusMessage.innerText = 'Simulcast has ended.';
+          statusMessage.style.display = 'block';
+        }
+      }
+
+      const fullscreenButton = document.getElementById('fullscreenButton');
+
+      // Handle fullscreen button click
+      fullscreenButton.addEventListener('click', () => {
+        const iframeWrapper = document.getElementById('expandedVideo');
+        if (!document.fullscreenElement) {
+          iframeWrapper.requestFullscreen().catch((err) => {
+            console.error(
+              `Error attempting to enter fullscreen mode: ${err.message}`,
+            );
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      // Initial setup
+      vimeoPlayer.setMuted(true); // Start muted
+      syncVideo();
+
+      // Periodic checks for simulcast status
+      //setInterval(syncVideo, 1000);
+
+      function adjustTextScaling() {
+        const videoWrapper = document.querySelector('.iframe-wrapper');
+        const headerText = document.querySelector('#headerText');
+
+        // Get computed dimensions of the video container
+        const containerWidth = videoWrapper.offsetWidth;
+        const containerHeight = videoWrapper.offsetHeight;
+
+        // Set font size proportional to container height
+        const fontSize = containerHeight * 0.04; // 5% of container height
+        headerText.style.fontSize = `${fontSize}px`;
+      }
+
+      // Adjust on window resize and on load
+      window.addEventListener('resize', adjustTextScaling);
+      adjustTextScaling(); // Initial call
+
+      document.addEventListener('fullscreenchange', () => {
+        const iframeWrapper = document.getElementById('expandedVideo');
+
+        if (!document.fullscreenElement) {
+          // Restore original styles
+          iframeWrapper.style.width = '100vw';
+          iframeWrapper.style.height = 'auto';
+          iframeWrapper.style.maxHeight = 'calc(100vh)';
+          iframeWrapper.style.maxWidth = 'calc(100vh * (4 / 3))';
+          iframeWrapper.style.aspectRatio = '4 / 3';
+
+          // Force repaint
+          iframeWrapper.style.opacity = '0.99'; // Temporarily change opacity
+          setTimeout(() => {
+            iframeWrapper.style.opacity = '1'; // Restore opacity
+          }, 50);
+        }
+      });
+    </script>
+  </body>
+</html>
