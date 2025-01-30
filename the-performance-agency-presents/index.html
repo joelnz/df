@@ -3,6 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="DFTV Simulcast" />
+    <meta
+      property="og:description"
+      content="The Performance Agency presents Dripfeed E06: Succubus by Tarren Johnson & Joel Cocks. 15min video on continuous loop • Jan 31 – Feb 2, 2025."
+    />
+    <meta
+      property="og:image"
+      content="https://dripfeed.tv/the-performance-agency-presents/dripfeed_succubus_tarren_johnson_and_joel_cocks.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="DFTV Simulcast - Dripfeed E06: Succubus"
+    />
+
+    <meta name="twitter:title" content="DFTV Simulcast" />
+    <meta
+      name="twitter:description"
+      content="The Performance Agency presents Dripfeed E06: Succubus by Tarren Johnson & Joel Cocks. 15min video on continuous loop • Jan 31 – Feb 2, 2025."
+    />
+    <meta
+      name="twitter:image"
+      content="https://dripfeed.tv/the-performance-agency-presents/dripfeed_succubus_tarren_johnson_and_joel_cocks.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="DFTV Simulcast - Dripfeed E06: Succubus"
+    />
     <link rel="icon" href="./favicon.ico" />
     <title>The Performance Agency Presents: DFTV Simulcast</title>
     <link
@@ -134,7 +161,7 @@
         z-index: 9999;
         font-size: 13px;
         line-height: 1.5;
-       color: rgb(226, 226, 226);
+        color: rgb(226, 226, 226);
         /*background: url('http://dripfeed.tv/img/background-pinstripe.png') !important;*/
         background: gray;
       }
@@ -143,8 +170,7 @@
         background: #afafaf;
         color: #222;
       }
-    
-    
+
       #infoOverlay .buffer {
         height: 100px;
 
@@ -155,11 +181,9 @@
         margin-top: 0;
       }
 
-
       #infoOverlay p {
-       max-width: 500px;
+        max-width: 500px;
       }
-      
 
       #closeInfo {
         position: absolute;
@@ -199,8 +223,6 @@
           display: none;
         }
       }
-
-     
     </style>
   </head>
   <body>
@@ -235,31 +257,37 @@
       <div class="buffer"></div>
 
       <p>
-      <span class="boldwhite">The Performance Agency presents</span> <br /><br />
+        <span class="boldwhite">The Performance Agency presents</span>
+        <br /><br />
 
-<span>Dripfeed Episode 6: Succubus</span><br />
-<span>Tarren Johnson</span><span> & </span><span>Joel Cocks</span><br />
-<span>2025, 15 minutes</span><br /><br />
+        <span>Dripfeed Episode 6: Succubus</span><br />
+        <span>Tarren Johnson</span><span> & </span><span>Joel Cocks</span
+        ><br />
+        <span>2025, 15 minutes</span><br /><br />
 
-<span class="boldwhite">Three-day simulcast on continuous loop<br /><br /></span>
+        <span class="boldwhite"
+          >Three-day simulcast on continuous loop<br /><br
+        /></span>
 
-Dripfeed.tv (2018–) is an ongoing video series by Tarren Johnson and
-Joel Cocks that develops as a fragmented fiction, capturing the
-boundary between creation and collapse. Episodes blend B-roll footage,
-directorial cues, poetic dialogue, and actors grappling with rehearsal
-and repetition. Drawing from formats spanning vaudeville to social
-media, the series explores how narratives fracture, evolve, and resist
-coherence, reflecting the messy interplay of performance, trauma, and
-collective memory.<br />
-     This simulcast of Dripfeed.tv is presented in conjunction with the
-opening of "Blank Banquet", a solo exhibition by Joel Cocks and Tarren
-Johnson at The Physics Room, curated by <span>Jane Wallace</span>.<br />
-Voiceover: <span>Olamiju Fajemisin</span><br />
-Featuring: <span>Medhi Hamadouchi</span>, <span>Salber Lee Williams</span><br />
-Costume: <span>Marcus Karkhof</span><br />
-Partners: <span>Cité internationale des arts</span>, <span>Organ Vida Festival</span>, <span>The
-Physics Room</span>, <span>The Performance Agency</span>
-<br /><br />
+        Dripfeed.tv (2018–) is an ongoing video series by Tarren Johnson and
+        Joel Cocks that develops as a fragmented fiction, capturing the
+        boundary between creation and collapse. Episodes blend B-roll footage,
+        directorial cues, poetic dialogue, and actors grappling with rehearsal
+        and repetition. Drawing from formats spanning vaudeville to social
+        media, the series explores how narratives fracture, evolve, and resist
+        coherence, reflecting the messy interplay of performance, trauma, and
+        collective memory.<br />
+             This simulcast of Dripfeed.tv is presented in conjunction with the
+        opening of "Blank Banquet", a solo exhibition by Joel Cocks and Tarren
+        Johnson at The Physics Room, curated by
+        <span>Jane Wallace</span>.<br />
+        Voiceover: <span>Olamiju Fajemisin</span><br />
+        Featuring: <span>Medhi Hamadouchi</span>,
+        <span>Salber Lee Williams</span><br />
+        Costume: <span>Marcus Karkhof</span><br />
+        Partners: <span>Cité internationale des arts</span>,
+        <span>Organ Vida Festival</span>, <span>The Physics Room</span>,
+        <span>The Performance Agency</span> <br /><br />
       </p>
     </div>
 
@@ -335,10 +363,10 @@ Physics Room</span>, <span>The Performance Agency</span>
       fullscreenButton.addEventListener('click', () => {
         const iframeWrapper = document.getElementById('expandedVideo');
         if (!document.fullscreenElement) {
-           vimeoPlayer.setMuted(false);
-            unmuteButton.style.background = '#111';
-            unmuteButton.style.color = 'gray';
-            unmuteButton.innerHTML = 'Mute';
+          vimeoPlayer.setMuted(false);
+          unmuteButton.style.background = '#111';
+          unmuteButton.style.color = 'gray';
+          unmuteButton.innerHTML = 'Mute';
           iframeWrapper.requestFullscreen().catch((err) => {
             console.error(
               `Error attempting to enter fullscreen mode: ${err.message}`,
