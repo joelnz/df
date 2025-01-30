@@ -46,10 +46,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         color: white;
         font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
-
         background: black;
       }
 
@@ -72,7 +70,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
         padding: 0;
         margin: 0;
         height: auto;
@@ -92,47 +89,11 @@
         height: 100%;
       }
 
-      .video-overlay {
-        position: absolute;
-
-        width: 100vw;
-        height: auto;
-        aspect-ratio: 4 / 3;
-        max-height: calc(85vh);
-        max-width: calc(85vh * (4 / 3));
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 100;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        padding: 0;
-        margin: 0;
-      }
-
-      /* Unmute button */
       #unmuteButton {
         background: rgb(21, 76, 175);
-
         color: lightblue;
-
         cursor: pointer;
         z-index: 101;
-      }
-
-      .video-overlay #headerText {
-        position: absolute;
-        top: 3%; /* Adjust to position the text */
-        left: 3%;
-
-        text-align: left;
-        color: rgba(256, 256, 256, 0.8);
-        font-weight: bold;
-        box-sizing: border-box;
-        pointer-events: none;
-        line-height: 1.2;
       }
 
       #statusMessage {
@@ -162,23 +123,13 @@
         font-size: 13px;
         line-height: 1.5;
         color: rgb(226, 226, 226);
-        /*background: url('http://dripfeed.tv/img/background-pinstripe.png') !important;*/
         background: gray;
       }
 
-      #infoOverlay button {
-        background: #afafaf;
-        color: #222;
-      }
-
+  
       #infoOverlay .buffer {
         height: 100px;
-
         width: 100%;
-      }
-
-      #infoOverlay h2 {
-        margin-top: 0;
       }
 
       #infoOverlay p {
@@ -189,15 +140,15 @@
         position: absolute;
         top: 10px;
         right: 10px;
-
         cursor: pointer;
+           background: #afafaf;
+        color: #222;
       }
       footer {
         position: fixed;
         bottom: 0px;
         width: 100vw;
         left: 0px;
-
         background: none;
         color: white;
         padding: 0;
@@ -205,24 +156,20 @@
         font-weight: bold;
         box-sizing: border-box;
         height: 7.5vh;
-
         z-index: 101;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
       }
-      footer img {
-        width: 50px;
-        background: black;
-        padding: 20px;
-      }
+    
       a,
       a:visited {
         color: rgb(226, 226, 226);
         text-decoration: none;
         cursor: pointer;
       }
+
       @media (max-width: 767px) {
         #fullscreenButton {
           display: none;
@@ -238,10 +185,7 @@
       <button id="unmuteButton">Unmute</button>
     </footer>
 
-    <div class="video-overlay">
-      <!--<div id="headerText">Dripfeed Episode 6: Succubus</div>-->
-    </div>
-
+  
     <!-- Video -->
     <div class="iframe-wrapper" id="expandedVideo">
       <iframe
@@ -260,7 +204,6 @@
     <div id="infoOverlay">
       <button id="closeInfo">Close</button>
       <div class="buffer"></div>
-
       <p>
         The Performance Agency presents
         <br /><br />
@@ -331,7 +274,6 @@
             vimeoPlayer.setMuted(false);
             unmuteButton.style.background = '#111';
             unmuteButton.style.color = 'gray';
-
             unmuteButton.innerHTML = 'Mute';
           } else {
             vimeoPlayer.setMuted(true);
@@ -402,29 +344,9 @@
       vimeoPlayer.setMuted(true); // Start muted
       syncVideo();
 
-      // Periodic checks for simulcast status
-      //setInterval(syncVideo, 1000);
-
-      function adjustTextScaling() {
-        const videoWrapper = document.querySelector('.iframe-wrapper');
-        const headerText = document.querySelector('#headerText');
-
-        // Get computed dimensions of the video container
-        const containerWidth = videoWrapper.offsetWidth;
-        const containerHeight = videoWrapper.offsetHeight;
-
-        // Set font size proportional to container height
-        const fontSize = containerHeight * 0.04; // 5% of container height
-        headerText.style.fontSize = `${fontSize}px`;
-      }
-
-      // Adjust on window resize and on load
-      window.addEventListener('resize', adjustTextScaling);
-      adjustTextScaling(); // Initial call
 
       document.addEventListener('fullscreenchange', () => {
         const iframeWrapper = document.getElementById('expandedVideo');
-
         if (!document.fullscreenElement) {
           // Restore original styles
           iframeWrapper.style.width = '100vw';
