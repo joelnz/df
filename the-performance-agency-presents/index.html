@@ -42,6 +42,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
+        width: 100%;
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -73,11 +74,11 @@
         padding: 0;
         margin: 0;
         height: auto;
-        width: 100vw!important;
+        width: 100%;
         height: auto;
         aspect-ratio: 4 / 3;
         max-height: 85vh;
-        max-width: 100vw;
+        max-width: 100%;
         overflow: hidden;
         background: black;
       }
@@ -376,6 +377,19 @@ document.addEventListener('MSFullscreenChange', () => {
     location.reload();
   }
 });
+
+function isIpad() {
+  return (
+    navigator.userAgent.includes("iPad") ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) // Detects newer iPads
+  );
+}
+
+window.onload = function () {
+  if (isIpad()) {
+    document.getElementById("fullscreenButton").style.display = "none";
+  }
+};
     </script>
   </body>
 </html>
