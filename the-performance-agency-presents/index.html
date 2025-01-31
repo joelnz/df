@@ -76,7 +76,7 @@
         width: 100vw;
         height: auto;
         aspect-ratio: 4 / 3;
-        max-height: calc(85vh);
+        max-height: 85vh;
         max-width: 100vw;
         overflow: hidden;
         background: black;
@@ -313,21 +313,22 @@
 
       // Handle fullscreen button click
       fullscreenButton.addEventListener('click', () => {
-        const iframeWrapper = document.getElementById('expandedVideo');
-        if (!document.fullscreenElement) {
-          vimeoPlayer.setMuted(false);
-          unmuteButton.style.background = '#111';
-          unmuteButton.style.color = 'gray';
-          unmuteButton.innerHTML = 'Mute';
-          iframeWrapper.requestFullscreen().catch((err) => {
-            console.error(
-              `Error attempting to enter fullscreen mode: ${err.message}`,
-            );
-          });
-        } else {
-          document.exitFullscreen();
-        }
-      });
+  const iframeWrapper = document.getElementById('expandedVideo');
+
+  if (iframeWrapper.requestFullscreen) {
+    iframeWrapper.requestFullscreen();
+  } else if (iframeWrapper.webkitRequestFullscreen) {
+    // Support for iPads and Safari
+    iframeWrapper.webkitRequestFullscreen();
+  } else if (iframeWrapper.msRequestFullscreen) {
+    iframeWrapper.msRequestFullscreen();
+  }
+
+  vimeoPlayer.setMuted(false);
+  unmuteButton.style.background = '#111';
+  unmuteButton.style.color = 'gray';
+  unmuteButton.innerHTML = 'Mute';
+});
 
       // Initial setup
       vimeoPlayer.setMuted(true); // Start muted
@@ -350,6 +351,31 @@
           }, 50);
         }
       });
+
+
+      document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    location.reload(); // Refresh the page only when exiting fullscreen
+  }
+});
+
+document.addEventListener('webkitfullscreenchange', () => { 
+  if (!document.webkitFullscreenElement) { 
+    location.reload();
+  }
+});
+
+document.addEventListener('mozfullscreenchange', () => {
+  if (!document.mozFullScreen) {
+    location.reload();
+  }
+});
+
+document.addEventListener('MSFullscreenChange', () => {
+  if (!document.msFullscreenElement) {
+    location.reload();
+  }
+});
     </script>
   </body>
 </html>
