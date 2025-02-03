@@ -16,7 +16,6 @@
       property="og:image:alt"
       content="DFTV Simulcast - Dripfeed E06: Succubus"
     />
-
     <meta name="twitter:title" content="DFTV Simulcast" />
     <meta
       name="twitter:description"
@@ -66,34 +65,34 @@
         font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
       }
 
-.iframe-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
+      .iframe-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        margin: 0;
 
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 4 / 3; /* Standard approach */
-  max-height: 85vh;
-  max-width: 100%;
-  overflow: hidden;
-  background: black;
-}
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 4 / 3; /* Standard approach */
+        max-height: 85vh;
+        max-width: 100%;
+        overflow: hidden;
+        background: black;
+      }
 
-@supports not (aspect-ratio: 4 / 3) {
-  .iframe-wrapper {
-    width: 100%;
-    height: 100%;
-  }
+      @supports not (aspect-ratio: 4 / 3) {
+        .iframe-wrapper {
+          width: 100%;
+          height: 100%;
+        }
 
-  #vimeoPlayer {
-    width: 100%;
-    height: 100%;
-  }
-}
+        #vimeoPlayer {
+          width: 100%;
+          height: 100%;
+        }
+      }
       #vimeoPlayer {
         padding: 0;
         margin: 0;
@@ -113,8 +112,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 24px;
-        color: white;
+        font-size: 18px;
+        color: silver;
         text-align: center;
         display: none;
       }
@@ -138,7 +137,6 @@
         background: gray;
       }
 
-  
       #infoOverlay .buffer {
         height: 100px;
         width: 100%;
@@ -153,7 +151,7 @@
         top: 10px;
         right: 10px;
         cursor: pointer;
-           background: #afafaf;
+        background: #afafaf;
         color: #222;
       }
       footer {
@@ -174,7 +172,7 @@
         justify-content: center;
         font-family: Geneva, Arial, Helvetica, Swiss, SunSans-Regular;
       }
-    
+
       a,
       a:visited {
         color: rgb(226, 226, 226);
@@ -197,7 +195,6 @@
       <button id="unmuteButton">Unmute</button>
     </footer>
 
-  
     <!-- Video -->
     <div class="iframe-wrapper" id="expandedVideo">
       <iframe
@@ -227,7 +224,9 @@
         2025, 15 minutes
         <br /><br />
 
-        Three-day simulcast on continuous loop
+        Three-day simulcast on continuous loop<br />
+        31.01–02.02.2025
+
         <br /><br />
 
         Dripfeed.tv (2018–) is an ongoing video series by Tarren Johnson and
@@ -251,7 +250,8 @@
         <br />
         Costume: Marcus Karkhof
         <br />
-        Partners: Cité internationale des arts, Organ Vida Festival, The Physics Room, The Performance Agency
+        Partners: Cité internationale des arts, Organ Vida Festival, The
+        Physics Room, The Performance Agency
         <br /><br />
       </p>
     </div>
@@ -265,8 +265,8 @@
       const closeInfo = document.getElementById('closeInfo');
       const statusMessage = document.getElementById('statusMessage');
 
-      const startDate = new Date('2025-01-01T12:00:00Z');
-      const endDate = new Date('2025-12-18T13:00:00Z');
+      const startDate = new Date('2025-01-31T10:00:00Z');
+      const endDate = new Date('2025-02-02T10:00:00Z');
 
       // Handle unmute/mute toggle
       unmuteButton.addEventListener('click', () => {
@@ -302,7 +302,13 @@
       // Sync video to simulcast time
       function syncVideo() {
         const now = new Date();
+        const iframeWrapper = document.getElementById('expandedVideo');
+        const vimeoPlayerFrame = document.getElementById('vimeoPlayer');
+        const unmuteButton = document.getElementById('unmuteButton');
+        const fullscreenButton = document.getElementById('fullscreenButton');
+
         if (now >= startDate && now <= endDate) {
+          // Video should be accessible
           const elapsed = (now - startDate) / 1000; // Time since start in seconds
           vimeoPlayer.getDuration().then((duration) => {
             const position = elapsed % duration; // Calculate where the video should start
@@ -312,12 +318,21 @@
               });
             });
           });
-        } else if (now < startDate) {
-          statusMessage.innerText = 'Simulcast starts soon.';
+          statusMessage.style.display = 'none'; // Hide any status message
+          iframeWrapper.style.display = 'flex'; // Show video
+          unmuteButton.style.display = 'inline-block'; // Show unmute button
+          fullscreenButton.style.display = 'inline-block'; // Show fullscreen button
+        } else {
+          // Video should not be accessible
+          statusMessage.innerText =
+            now < startDate
+              ? 'DFTV Simulcast starts soon'
+              : 'DFTV Simulcast has ended';
           statusMessage.style.display = 'block';
-        } else if (now > endDate) {
-          statusMessage.innerText = 'Simulcast has ended.';
-          statusMessage.style.display = 'block';
+          iframeWrapper.style.display = 'none'; // Hide video
+          vimeoPlayerFrame.remove(); // Remove iframe to prevent access
+          unmuteButton.style.display = 'none'; // Hide unmute button
+          fullscreenButton.style.display = 'none'; // Hide fullscreen button
         }
       }
 
@@ -325,27 +340,26 @@
 
       // Handle fullscreen button click
       fullscreenButton.addEventListener('click', () => {
-  const iframeWrapper = document.getElementById('expandedVideo');
+        const iframeWrapper = document.getElementById('expandedVideo');
 
-  if (iframeWrapper.requestFullscreen) {
-    iframeWrapper.requestFullscreen();
-  } else if (iframeWrapper.webkitRequestFullscreen) {
-    // Support for iPads and Safari
-    iframeWrapper.webkitRequestFullscreen();
-  } else if (iframeWrapper.msRequestFullscreen) {
-    iframeWrapper.msRequestFullscreen();
-  }
+        if (iframeWrapper.requestFullscreen) {
+          iframeWrapper.requestFullscreen();
+        } else if (iframeWrapper.webkitRequestFullscreen) {
+          // Support for iPads and Safari
+          iframeWrapper.webkitRequestFullscreen();
+        } else if (iframeWrapper.msRequestFullscreen) {
+          iframeWrapper.msRequestFullscreen();
+        }
 
-  vimeoPlayer.setMuted(false);
-  unmuteButton.style.background = '#111';
-  unmuteButton.style.color = 'gray';
-  unmuteButton.innerHTML = 'Mute';
-});
+        vimeoPlayer.setMuted(false);
+        unmuteButton.style.background = '#111';
+        unmuteButton.style.color = 'gray';
+        unmuteButton.innerHTML = 'Mute';
+      });
 
       // Initial setup
       vimeoPlayer.setMuted(true); // Start muted
       syncVideo();
-
 
       document.addEventListener('fullscreenchange', () => {
         const iframeWrapper = document.getElementById('expandedVideo');
@@ -364,43 +378,42 @@
         }
       });
 
-
       document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement) {
-    location.reload(); // Refresh the page only when exiting fullscreen
-  }
-});
+        if (!document.fullscreenElement) {
+          location.reload(); // Refresh the page only when exiting fullscreen
+        }
+      });
 
-document.addEventListener('webkitfullscreenchange', () => { 
-  if (!document.webkitFullscreenElement) { 
-    location.reload();
-  }
-});
+      document.addEventListener('webkitfullscreenchange', () => {
+        if (!document.webkitFullscreenElement) {
+          location.reload();
+        }
+      });
 
-document.addEventListener('mozfullscreenchange', () => {
-  if (!document.mozFullScreen) {
-    location.reload();
-  }
-});
+      document.addEventListener('mozfullscreenchange', () => {
+        if (!document.mozFullScreen) {
+          location.reload();
+        }
+      });
 
-document.addEventListener('MSFullscreenChange', () => {
-  if (!document.msFullscreenElement) {
-    location.reload();
-  }
-});
+      document.addEventListener('MSFullscreenChange', () => {
+        if (!document.msFullscreenElement) {
+          location.reload();
+        }
+      });
 
-function isIpad() {
-  return (
-    navigator.userAgent.includes("iPad") ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) // Detects newer iPads
-  );
-}
+      function isIpad() {
+        return (
+          navigator.userAgent.includes('iPad') ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) // Detects newer iPads
+        );
+      }
 
-window.onload = function () {
-  if (isIpad()) {
-    document.getElementById("fullscreenButton").style.display = "none";
-  }
-};
+      window.onload = function () {
+        if (isIpad()) {
+          document.getElementById('fullscreenButton').style.display = 'none';
+        }
+      };
     </script>
   </body>
 </html>
